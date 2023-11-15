@@ -1,5 +1,5 @@
 const {Wallets}=require('../models');
-
+let id;
 
 const createWallet=async(request,response)=>{
     try{
@@ -9,7 +9,13 @@ const createWallet=async(request,response)=>{
             name,balance,
         });
         console.log('New Wallet Created...');
-        response.status(200).json({newWallet});
+        const responseData = {
+            newWallet,
+            id: newWallet.id,
+            balance:newWallet.balance,
+        };
+        response.status(200).json(responseData);
+        return responseData;
     }
     catch(error){
         console.log("Error creating wallet...",error);

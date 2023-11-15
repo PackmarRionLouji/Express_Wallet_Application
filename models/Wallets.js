@@ -30,6 +30,8 @@ const Wallets=sequelize.define('Wallets',{
         allowNull:false,
         defaultValue:DataTypes.NOW,
     },
+},{
+    timestamps:false,
 });
 
 module.exports=Wallets;

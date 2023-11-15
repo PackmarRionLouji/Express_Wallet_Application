@@ -28,6 +28,8 @@ module.exports = {
           allowNull:false,
           defaultValue:DataTypes.NOW,
       },
+    },{
+      timestamps:false,
     })
 
   },

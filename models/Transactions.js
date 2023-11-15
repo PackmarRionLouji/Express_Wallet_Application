@@ -1,49 +1,40 @@
-// const {Sequelize,DataType, DataTypes}=require('sequelize');
-// const sequelize = require('./sequelize');
-
-const { DataTypes } = require('sequelize');
+const { DataTypes, Sequelize} = require('sequelize');
 const sequelize = require('../sequelize/sequelize');
 
-const Transactions=sequelize.define('Transactions',{
-    id:{
-        type:DataTypes.INTEGER,
-        unique:true,
-        primaryKey:true,
-        autoIncrement:true,
-        allowNull:false,
+const Transactions = sequelize.define('Transactions', {
+    transaction_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        primaryKey: true,
+        defaultValue:Sequelize.UUIDV4
     },
-    transaction_id:{
-        type:DataTypes.UUID,
-        unique:true,
-        // primaryKey:true,
-        autoincrement:true,
-        allowNull:false,
+    wallet_id: {
+        type: DataTypes.INTEGER,
+        unique: true,
+        allowNull: false,
     },
-    wallet_id:{
-        type:DataTypes.UUID,
-        unique:true,
-        allowNull:false,
+    type: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
-    type:{
-        type:DataTypes.INTEGER,
-        allowNull:false,
+    amount: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
     },
-    amount:{
-        type:DataTypes.DOUBLE,
-        allowNull:false,
+    balance: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
     },
-    balance:{
-        type:DataTypes.DOUBLE,
-        allowNull:false,
+    created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
     },
-    created_at:{
-        type:DataTypes.DATE,
-        defaultValue:DataTypes.NOW,
+    updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
     },
-    updated_at:{
-        type:DataTypes.DATE,
-        defaultValue:DataTypes.NOW,
-    },
+}, {
+    timestamps: false,
 });
 
-module.exports=Transactions;
+module.exports = Transactions;

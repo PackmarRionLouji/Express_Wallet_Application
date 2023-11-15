@@ -6,17 +6,15 @@ const PORT=3000;
 const {wallet_route,transaction_route}=require('./route');
 
 app.use(express.json());
-app.use('/api/wallets',wallet_route);
-// app.use('/',transaction_route);
+app.use('/api/wallet/setup',wallet_route);
+// app.use('/api/transact',transaction_route);
 
 
-sequelize.sync()
-    .then(()=>{
-        console.log("Database synced successfully....");
-    })
-    .catch((error)=>{
-        console.log("Error creating database...",error);
-    });
+sequelize.sync({ force: true }).then(() => {
+    console.log('Database synced successfully....');
+}).catch((err) => {
+    console.error('Error syncing database:', err);
+});
 
 app.listen(PORT,(error)=>{
     if(!error){
