@@ -7,7 +7,7 @@ const {wallet_route,transaction_route}=require('./route');
 
 app.use(express.json());
 app.use('/api/wallet/setup',wallet_route);
-// app.use('/api/transact',transaction_route);
+app.use('/api/transact',transaction_route);
 
 
 sequelize.sync({ force: true }).then(() => {

@@ -1,26 +1,47 @@
-const {Wallets}=require('../models');
-let id;
+const { v4: uuidv4 } = require('uuid');
+const { Wallets, Transactions } = require('../models');
+const { Validate } = require('../validators/validate'); 
 
-const createWallet=async(request,response)=>{
-    try{
-        const {name,balance}=request.body;
-        
-        const newWallet=await Wallets.create({
-            name,balance,
-        });
-        console.log('New Wallet Created...');
-        const responseData = {
-            newWallet,
-            id: newWallet.id,
-            balance:newWallet.balance,
-        };
-        response.status(200).json(responseData);
-        return responseData;
+const createWallet = async (request, response) => {
+  try {
+    const { name, balance } = request.body;
+
+    const validator = new Validate();
+    const { error: validationError } = validator.validateWallet(name, balance);
+
+    if (validationError) {
+      return response.status(400).json({
+        error: 'Validation Error',
+        message:"Enter a proper name",
+    });
     }
-    catch(error){
-        console.log("Error creating wallet...",error);
-        response.status(500).json({error:'Internal server Error'});
+    const checkExistingWallet=await Wallets.findOne({
+        where:{name},
+    });
+    if(checkExistingWallet){
+        return response.status(400).json({error:`Error creating wallet. ${name} already exixts.`});
     }
+    else{
+      const newWallet = await Wallets.create({
+          name, balance,
+      });
+      const transactionId=uuidv4();
+      // console.log(transactionId);
+      const newTransaction = await Transactions.create({
+          transaction_id:transactionId,
+          wallet_id: newWallet.id,
+          type: 1,
+          amount: balance,
+          balance,
+          description:"Initial Creation",
+      });
+      console.log("Wallet created Successfully...");
+      response.status(200).json(newWallet);
+    }
+  } catch (error) {
+    console.error("Error creating Wallet...", error);
+    response.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-module.exports={createWallet};
+module.exports = { createWallet };

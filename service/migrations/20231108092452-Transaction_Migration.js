@@ -7,12 +7,11 @@ module.exports = {
         transaction_id: {
             type: DataTypes.UUID,
             allowNull: false,
-            primaryKey: true,
             defaultValue:Sequelize.UUIDV4
         },
       wallet_id: {
           type: DataTypes.INTEGER,
-          unique: true,
+          primaryKey: true,
           allowNull: false,
       },
       type: {
@@ -35,6 +34,10 @@ module.exports = {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW,
       },
+      description:{
+        type:DataTypes.STRING,
+        allowNull:false,
+      }
   }, {
       timestamps: false,
   })  

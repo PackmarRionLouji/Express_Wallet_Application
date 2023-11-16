@@ -4,13 +4,12 @@ const sequelize = require('../sequelize/sequelize');
 const Transactions = sequelize.define('Transactions', {
     transaction_id: {
         type: DataTypes.UUID,
-        allowNull: false,
         primaryKey: true,
-        defaultValue:Sequelize.UUIDV4
+        allowNull: false,
+        defaultValue:Sequelize.UUIDV4,
     },
     wallet_id: {
         type: DataTypes.INTEGER,
-        unique: true,
         allowNull: false,
     },
     type: {
@@ -33,6 +32,10 @@ const Transactions = sequelize.define('Transactions', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
+    description:{
+        type:DataTypes.STRING,
+        allowNull:false,
+    }
 }, {
     timestamps: false,
 });
