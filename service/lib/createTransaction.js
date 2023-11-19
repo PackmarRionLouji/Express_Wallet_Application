@@ -18,7 +18,7 @@ const createTransaction= async(walletId,amount,description)=>{
                     transaction_id:transaction_id,
                     wallet_id:getWallet.id,
                     type:amount>=0? 1:0,
-                    amount,
+                    amount:amount>=0? amount:-amount,
                     balance:newBalance,
                     description:description,
             });

@@ -3,7 +3,12 @@ const express=require('express');
 const {sequelize,Transactions,Wallets}=require('./models');
 const app=express();
 const PORT=3000;
-const {wallet_route,transaction_route,transactionList_route,transferMoney_route, downloadFile_route}=require('./route');
+const {wallet_route,
+    transaction_route,
+    transactionList_route,
+    transferMoney_route, 
+    downloadFile_route,
+    getWalletBalance_route}=require('./route');
 
 app.use(express.json());
 app.use('/api/wallet/setup',wallet_route);
@@ -11,6 +16,8 @@ app.use('/api/transact',transaction_route);
 app.use('/api/getTransactionsList',transactionList_route);
 app.use('/api/transferMoney',transferMoney_route);
 app.use('/api/downloadFile',downloadFile_route);
+app.use('/api/getWalletBalance',getWalletBalance_route);
+
 // sequelize.sync({ force: true }).then(() => {
 //     console.log('Database synced successfully....');
 // }).catch((err) => {

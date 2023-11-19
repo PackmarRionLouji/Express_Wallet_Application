@@ -2,10 +2,13 @@ const { Wallets } = require('../models');
 const  createTransaction  = require('../lib/createTransaction');
 const transferMoney=async(req,res)=>{
     const { fromAcc,toAcc,amount,description } = req.body;
+    if(fromAcc === toAcc ){
+        return res.status(400).json({error:'Sender account and Receiver account cannot be same.'});
+    }
     try{
         const sourceAcc = await Wallets.findByPk(fromAcc);
         const destAcc = await Wallets.findByPk(toAcc);
-
+        
         if(!sourceAcc || !destAcc){
             if(!sourceAcc){
                 return res.status(404).json({error:'Sender account details are not found.'});

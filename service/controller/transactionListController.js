@@ -2,11 +2,12 @@ const { Transactions,Wallets } = require('../models');
 
 const getTransactionsList=async(req,res)=>{
     try{
-        const { walletId} = req.body;
-        const limit = 25;
-        const page = 1;
-        const offset = (page - 1) * limit;
-
+        const { walletId,page } = req.query;
+        
+        // const page = req.query.page || 1;
+        
+        //pagination
+        
         const wallet = await Wallets.findByPk(walletId);
         const userName = wallet.name;
 
@@ -14,15 +15,17 @@ const getTransactionsList=async(req,res)=>{
             res.status(400).json({error:"Wallet not found"});
         }
         else{
+            const limit = 25;
+            const offset = (page - 1) * limit;
             const transactions = await Transactions.findAll({
                 where: { wallet_id: walletId },
                 offset: offset,
                 limit: limit,
                 order: [['created_at', 'DESC']],
             });
-
-            console.log(transactions);
-            res.status(200).json({ userName, transactions: transactions.slice(offset,limit) });
+            const totalCount = await transactions.length;
+            console.log(totalCount);
+            res.status(200).json({userName,totalCount,transactions:transactions.slice(0,limit)});
         }       
     }
     catch(error){
