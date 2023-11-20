@@ -1,41 +1,73 @@
-const { Wallets } = require('../models');
-const  createTransaction  = require('../lib/createTransaction');
+const { Wallets,Transactions } = require('../models');
+const { v4:uuidv4 } = require('uuid');
+const { Validate } = require('../validators/validate');
+const { createData,createTransaction } =require('../lib');
+
 const transferMoney=async(req,res)=>{
     const { fromAcc,toAcc,amount,description } = req.body;
     if(fromAcc === toAcc ){
-        return res.status(400).json({error:'Sender account and Receiver account cannot be same.'});
+        res.status(400).json({error:'Sender account and Receiver account cannot be same.'});
+    }
+    else if( amount <0){
+        res.status(400).json({error:"Enter valid amount"});
     }
     try{
         const sourceAcc = await Wallets.findByPk(fromAcc);
         const destAcc = await Wallets.findByPk(toAcc);
-        
         if(!sourceAcc || !destAcc){
             if(!sourceAcc){
-                return res.status(404).json({error:'Sender account details are not found.'});
+                res.status(404).json({error:'Sender account details are not found.'});
             }
             else{
-                return res.status(404).json({error:'Receiver account details are not found.'});
+                res.status(404).json({error:'Receiver account details are not found.'});
             }
-        }
-
-        else if(sourceAcc.balance<amount){
-            return res.status(400).json({error:"Insuficient funds."});
         }
         else{
             const creditAmount=amount;
             const debitAmount=-amount;
-            const debitResult=await createTransaction(fromAcc,debitAmount,description);
-            const creditResult=await createTransaction(toAcc,creditAmount,description);
-            if (creditResult.success) {
-                res.status(200).json({ message: creditResult.message, transaction: creditResult.transaction });
-            } else {
-                res.status(400).json({ error: creditResult.error });
+            const validate =new Validate();
+            const validate_Transaction1 = await validate.validateTransaction(fromAcc,debitAmount,description);
+            const validate_Transaction2 = await validate.validateTransaction(toAcc,creditAmount,description);
+         
+            if(validate_Transaction1 && validate_Transaction2){
+                const sourceAcc_data = [await createData(fromAcc,debitAmount,description)];
+                const destAcc_data = [await createData(toAcc,creditAmount,description)];
+
+                // console.log(sourceAcc_data[0]);
+                if(Object.keys(sourceAcc_data[0]).length>2 && Object.keys(destAcc_data[0]).length>2){
+                    const data = sourceAcc_data.concat(destAcc_data);
+                    // console.log(data);
+                    const result=await createTransaction(data);
+                    res.status(200).json({ message:`Money is transferred from ${fromAcc} to ${toAcc}. Transaction is completed Successfully`,Sender_Details:result[0],Receiver_Details:result[1]});
+                    
+                }else if(Object.keys(sourceAcc_data[0]).length===1 && Object.keys(destAcc_data[0]).length===1){
+                    console.log("Endpoint");
+                    res.status(400).json({message:destAcc_data['message']});
+                }
+                else if(Object.keys(sourceAcc_data[0]).length===1){
+                    res.status(400).json({message:sourceAcc_data[0]['error']});   
+                }
+                else if(Object.keys(destAcc_data[0]).length===1){
+                    res.status(400).json({message:destAcc_data[0]['error']});   
+                }
             }
-            // return res.status(200).json({message:`Money transfer successful from ${sourceAcc.name} (${sourceAcc.wallet_id}) to ${destAcc.name} (${destAcc.wallet_id})`}); 
+            else{
+                res.status(400).json({error:"Enter Valid Details"});
+            }
+            // else if(Object.keys(sourceAcc_data[0]).length===1){
+            //     await destAcc.update({balance:(destAcc.balance-creditAmount)});
+            //     console.log("case2");
+            //     res.status(400).json({message:sourceAcc_data[0]['message']});
+            // }
+            // else if(Object.keys(destAcc_data[0]).length===1){
+            //     console.log("case1");
+            //     await sourceAcc.update({balance:(sourceAcc.balance+creditAmount)});
+            //     res.status(400).json({message:destAcc_data[0]['message']});
+            // }
         }
     }catch(error){
         console.log(error);
-        return res.status(500).json({error:"Internal Server Error."});
+        res.status(500).json({error:"Internal Server Error."});
     }
 }
 module.exports=transferMoney;

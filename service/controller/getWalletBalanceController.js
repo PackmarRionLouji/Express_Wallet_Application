@@ -9,7 +9,7 @@ const getWalletBalance=async(req,res)=>{
         }
         const wallet= await Wallets.findByPk(walletId);
 
-        console.log(wallet);
+        // console.log(wallet);
 
         if(wallet){
             const getBalance = wallet.balance;
