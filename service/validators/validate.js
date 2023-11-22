@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 const { Wallets } = require('../models');
 
 const walletSchema = Joi.object({
-  name: Joi.string().regex(/^[a-zA-Z ]+$/).min(1).max(50).required().trim().messages({
+  name: Joi.string().regex(/^[a-zA-Z0-9 ]+$/).min(1).max(50).required().trim().messages({
     'string.pattern.base':'Names can only contain letters and spaces',
     'string.empty':'Name is required',
     'any.required':'Name is required',

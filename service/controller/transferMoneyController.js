@@ -14,7 +14,10 @@ const transferMoney=async(req,res)=>{
     try{
         const sourceAcc = await Wallets.findByPk(fromAcc);
         const destAcc = await Wallets.findByPk(toAcc);
-        if(!sourceAcc || !destAcc){
+        if(!sourceAcc && !destAcc){
+            res.status(404).json({error:'Sender and Receiver account details are not found.'});
+        }
+        else if(!sourceAcc || !destAcc){
             if(!sourceAcc){
                 res.status(404).json({error:'Sender account details are not found.'});
             }

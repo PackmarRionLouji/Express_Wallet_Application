@@ -15,7 +15,7 @@ const getTransactionsList=async(req,res)=>{
             res.status(400).json({error:"Wallet not found"});
         }
         else{
-            const limit = 25;
+            const limit = 2;
             const offset = (page - 1) * limit;
             const transactions = await Transactions.findAll({
                 where: { wallet_id: walletId },
@@ -24,8 +24,8 @@ const getTransactionsList=async(req,res)=>{
                 order: [['created_at', 'DESC']],
             });
             const totalCount = await transactions.length;
-            console.log(totalCount);
-            res.status(200).json({userName,totalCount,transactions:transactions.slice(0,limit)});
+            // console.log(totalCount);
+            res.status(200).json({userName,totalCount,transactions:transactions});
         }       
     }
     catch(error){
