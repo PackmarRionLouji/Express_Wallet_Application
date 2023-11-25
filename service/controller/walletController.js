@@ -5,6 +5,7 @@ const { Validate } = require('../validators/validate');
 const createWallet = async (request, response) => {
   try {
     const { name, balance } = request.body;
+
     if(balance<0){
       response.status(400).json({error:"Initial Amount cannot be negative"});
     }

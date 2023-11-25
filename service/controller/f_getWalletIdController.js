@@ -8,7 +8,6 @@ const f_getWalletId=async(req,res)=>{
     }
     // const walletId = Wallets
     res.status(200).json({walletId});
-
 }
 
 // f_getWalletId();

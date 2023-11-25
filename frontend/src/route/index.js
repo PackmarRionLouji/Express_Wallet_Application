@@ -3,6 +3,7 @@ import createWallet from '../components/createWallet.vue';
 import homePage from '../components/homePage.vue'
 import transactMoney from '../components/transactMoney.vue';
 import transferMoney from '../components/transferMoney.vue';
+import checkBalance from '../components/checkBalance.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -27,6 +28,11 @@ const router = createRouter({
       name: 'transgerMoney',
       component: transferMoney,
     },
+    {
+      path: '/checkBalance',
+      name: 'checkBalance',
+      component: checkBalance,
+    },
   ],
 });
 
@@ -35,26 +41,3 @@ export default router;
 
 
 router.js
-// import { createRouter, createWebHistory } from 'vue-router';
-// import homePage from '@/components';
-// import createWallet from '../components';
-
-// const routes = [
-//   {
-//     path: '/',
-//     name: 'home',
-//     component: homePage,
-//   },
-//   {
-//     path: '/createWallet',
-//     name: 'createWallet',
-//     component: createWallet,
-//   },
-// ];
-
-// const router = createRouter({
-//   history: createWebHistory(),
-//   routes,
-// });
-
-// export default router;

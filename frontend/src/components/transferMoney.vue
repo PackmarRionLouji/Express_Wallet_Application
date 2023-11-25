@@ -1,12 +1,12 @@
 <template>
     <div style="width: 200px">
-        <ECascader :options="options" 
-                :props="props" 
+        <ECascader :options="walletOptions" 
+                   :props="props" 
                     clearable 
                     filterable 
                     v-model="InputSenderWalletId" placeholder="Sender Wallet Id"/>
-        <ECascader :options="options" 
-                :props="props" 
+        <ECascader :options="walletOptions" 
+                   :props="props" 
                     clearable 
                     filterable 
                     v-model="InputReceiverWalletId" placeholder="Receiver Wallet Id"/>
@@ -16,33 +16,28 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
+import { walletMixin  } from '../mixin/walletIdsMixing.js';
 export default {
+    name:'transferMoney',
     setup() {
         const InputSenderWalletId = ref('');
         const InputReceiverWalletId = ref('');
         const InputAmount = ref('');
         const InputDescription = ref('');
+        const walletOptions= ref('');
+
         const props = {
             checkStrictly: true,
         };
-        const options= [
-            {
-                value: 1,
-                label: 1,
-            },
-            {
-                value: 2,
-                label: 2,
-            },
-            {
-                value: 3,
-                label: 3,
-            },
-        ];
+
+        onMounted(async () => {
+            const walletData = await walletMixin();
+            walletOptions.value = walletData ? walletData.walletId.map(wallet => ({ value: wallet, label: wallet})) : [];
+        })
 
         return {
-            options, props, InputAmount,InputReceiverWalletId,InputSenderWalletId,InputDescription
+            walletOptions, props, InputAmount,InputReceiverWalletId,InputSenderWalletId,InputDescription
         }
 
     },

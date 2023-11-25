@@ -57,16 +57,6 @@ const transferMoney=async(req,res)=>{
             else{
                 res.status(400).json({error:"Enter Valid Details"});
             }
-            // else if(Object.keys(sourceAcc_data[0]).length===1){
-            //     await destAcc.update({balance:(destAcc.balance-creditAmount)});
-            //     console.log("case2");
-            //     res.status(400).json({message:sourceAcc_data[0]['message']});
-            // }
-            // else if(Object.keys(destAcc_data[0]).length===1){
-            //     console.log("case1");
-            //     await sourceAcc.update({balance:(sourceAcc.balance+creditAmount)});
-            //     res.status(400).json({message:destAcc_data[0]['message']});
-            // }
         }
     }catch(error){
         console.log(error);

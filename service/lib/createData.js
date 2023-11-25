@@ -1,7 +1,9 @@
 const { Wallets } =require('../models'); 
 const { v4:uuidv4 } = require('uuid');
 
-const createData = async(walletId,amount,description)=>{
+const createData = async(walletId1,amount1,description)=>{
+    const walletId = Number(walletId1);
+    const amount = Number(amount1);
     const wallet = await Wallets.findByPk(walletId);
     if(!wallet){
         const message = [{error:"Wallet Not found"}]; 

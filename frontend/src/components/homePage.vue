@@ -6,6 +6,7 @@
       <!-- </router-link> -->
       <EButton round @click="transferMoney" class="centered-button">Transfer Money</EButton>
       <EButton round @click="transactMoney" class="centered-button">Transact Money</EButton>
+      <EButton round @click="checkBalance" class="centered-button">Check Balance</EButton>
     </div>
   </div>
 </template>
@@ -30,6 +31,10 @@ export default {
     transactMoney() {
       console.log("Transact Money Clicked");
       this.$router.push('/transactMoney');
+    },
+    checkBalance() {
+      console.log("Check Balance Clicked");
+      this.$router.push('/checkBalance');
     },
   },
 };

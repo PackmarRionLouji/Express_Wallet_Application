@@ -3,6 +3,7 @@ const { Wallets } = require('../models');
 const getWalletBalance=async(req,res)=>{
     const { walletId } = req.body;
     // console.log(walletId);
+    console.log(walletId);
     try{
         if (!walletId) {
             return res.status(400).json({ error: 'Wallet ID is required.' });

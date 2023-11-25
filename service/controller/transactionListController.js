@@ -3,7 +3,6 @@ const { Transactions,Wallets } = require('../models');
 const getTransactionsList=async(req,res)=>{
     try{
         const { walletId,page } = req.query;
-        
         // const page = req.query.page || 1;
         
         //pagination
