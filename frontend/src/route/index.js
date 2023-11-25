@@ -1,6 +1,8 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import createWallet from '../components/createWallet.vue';
 import homePage from '../components/homePage.vue'
+import transactMoney from '../components/transactMoney.vue';
+import transferMoney from '../components/transferMoney.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,6 +16,16 @@ const router = createRouter({
       path: '/createWallet',
       name: 'createWallet',
       component: createWallet,
+    },
+    {
+      path: '/transactMoney',
+      name: 'transactMoney',
+      component: transactMoney,
+    },
+    {
+      path: '/transferMoney',
+      name: 'transgerMoney',
+      component: transferMoney,
     },
   ],
 });

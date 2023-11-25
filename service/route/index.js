@@ -6,6 +6,7 @@ const transferMoney_route=require('./transferMoney_route');
 const downloadFile_route=require('./downloadFile_route');
 const getWalletBalance_route=require('./getWalletBalance_route');
 const getTransaction_route=require('./getTransaction_route');
+const f_getWalletId_route = require('./f_getWalletId_route');  
 module.exports = {
   sequelize,
   wallet_route,
@@ -15,4 +16,5 @@ module.exports = {
   downloadFile_route,
   getWalletBalance_route,
   getTransaction_route,
+  f_getWalletId_route,
 };

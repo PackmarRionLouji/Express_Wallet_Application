@@ -25,9 +25,11 @@ export default {
     },
     transferMoney() {
       console.log("Transfer Money Clicked");
+      this.$router.push('/transferMoney');
     },
     transactMoney() {
       console.log("Transact Money Clicked");
+      this.$router.push('/transactMoney');
     },
   },
 };

@@ -1,23 +1,44 @@
-<template >
-  <EInput v-model="input" placeholder="Please enter your name" clearable/>
-  <EInput v-model="input" placeholder="Please enter balance" clearable/>
+<template>
+  <div class="button-container">
+    <EInput v-model="nameInput" placeholder="Enter your name" clearable/>
+    <EInput v-model="balanceInput" placeholder="Enter balance" clearable/>
+    <button @click="createWallet">Create Wallet</button>
+  </div>
  </template>
 
-
-
+ 
 <script>
+import axios from '../axios';
 import { ref } from 'vue'
 export default {
   name: 'createWallet',
   setup() {
-    const input = ref('');
+    const nameInput = ref('');
+    const balanceInput = ref('');
+
+    const createWallet = async() =>{
+      try{
+        const response = await axios.get('http://localhost:3000/api/getWalletIds',{
+          name:nameInput.value,
+          balance:balanceInput.value,
+        });
+        console.log(response.data);
+        nameInput.value='';
+        balanceInput.value='';
+      }catch(error){
+        console.error('Error creating wallet:',error);
+      }
+    };
 
     return {
-      input,
+      nameInput,
+      balanceInput,
+      createWallet,
     };
   },
 };
 </script>
+
 
 <style>
 .button-container {
@@ -25,12 +46,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 200px;
 }
-.centered-button {
-  background-color: yellowgreen !important;
-  color: black !important;
-  margin: 10px !important;
-  padding: 20px 80px !important;
-}
+
 </style>
