@@ -1,3 +1,6 @@
+<!-- transaction histore -->
+<!-- download file -->
+<!-- transaction details -->
 <template>
   <div>
     <div class="button-container">
@@ -7,6 +10,7 @@
       <EButton round @click="transferMoney" class="centered-button">Transfer Money</EButton>
       <EButton round @click="transactMoney" class="centered-button">Transact Money</EButton>
       <EButton round @click="checkBalance" class="centered-button">Check Balance</EButton>
+      <EButton round @click="transactionHistory" class="centered-button">Transaction History</EButton>
     </div>
   </div>
 </template>
@@ -35,6 +39,10 @@ export default {
     checkBalance() {
       console.log("Check Balance Clicked");
       this.$router.push('/checkBalance');
+    },
+    transactionHistory() {
+      console.log("Transaction history clicked");
+      this.$router.push('/transactionHistory');
     },
   },
 };

@@ -29,16 +29,16 @@
             });
 
             const checkBalance = async () => {
-        try {
-            const walletId = Number(InputId.value[0]);
-            const balanceOutput = await axios.post('http://localhost:3000/api/getWalletBalance', {
-                walletId: walletId,
-            });
-            console.log(balanceOutput);
-            } catch (error) {
-                console.log('Error finding Wallet', error);
-            }
-        };
+                try {
+                    const walletId = Number(InputId.value[0]);
+                    const balanceOutput = await axios.post('http://localhost:3000/api/getWalletBalance', {
+                        walletId: walletId,
+                    });
+                    console.log(balanceOutput);
+                } catch (error) {
+                    console.log('Error finding Wallet', error);
+                }
+            };
 
             return {
                 props1, InputId,checkBalance,walletOptions,isDisabled,

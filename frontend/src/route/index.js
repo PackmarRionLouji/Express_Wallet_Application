@@ -4,6 +4,7 @@ import homePage from '../components/homePage.vue'
 import transactMoney from '../components/transactMoney.vue';
 import transferMoney from '../components/transferMoney.vue';
 import checkBalance from '../components/checkBalance.vue';
+import transactionHistory from '../components/transactionHistory.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/checkBalance',
       name: 'checkBalance',
       component: checkBalance,
+    },
+    {
+      path: '/transactionHistory',
+      name: 'transactionHistory',
+      component: transactionHistory,
     },
   ],
 });

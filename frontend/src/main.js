@@ -7,6 +7,9 @@ import {
     ElButton,
     ElInputNumber,
     ElCascader,
+    ElTable,
+    ElTableColumn,
+    ElPagination,
 } from 'element-plus';
 
 const app = createApp(App);
@@ -14,4 +17,7 @@ app.component('EInput', ElInput)
 app.component('EButton',ElButton)
 app.component('ENumber',ElInputNumber)
 app.component('ECascader',ElCascader)
+app.component('ETable',ElTable)
+app.component('ETableColumn',ElTableColumn)
+app.component('EPagination',ElPagination)
 app.use(router).mount('#app');

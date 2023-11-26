@@ -22,9 +22,12 @@ const getTransactionsList=async(req,res)=>{
                 limit: limit,
                 order: [['created_at', 'DESC']],
             });
-            const totalCount = await transactions.length;
+            const totalCount = await Transactions.count({
+                where: {wallet_id:walletId},
+            });
+            const count = await transactions.length;
             // console.log(totalCount);
-            res.status(200).json({userName,totalCount,transactions:transactions});
+            res.status(200).json({userName,totalCount,count,transactions:transactions});
         }       
     }
     catch(error){

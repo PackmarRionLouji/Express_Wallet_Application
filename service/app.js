@@ -10,7 +10,7 @@ const { wallet_route,
         downloadFile_route,
         getWalletBalance_route,
         getTransaction_route,
-        f_getWalletId_route }=require('./route');
+        f_getWalletId_route, }=require('./route');
 const cors = require('cors');
 
 app.use(express.json());
