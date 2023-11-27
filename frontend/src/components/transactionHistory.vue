@@ -2,6 +2,7 @@
     <div style="width:200px">
         <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Id" filterable clearable v-model="InputId"/>
         <EButton @click="performHistory" :disabled="isDisabled">Submit</EButton>
+        <EButton :disabled="isDisabled" @click="downloadTransaction">Download Button</EButton>
     </div>
     <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="{ width: '100%'}">
         <ETableColumn prop="transaction_id" label="Transaction ID" width="270"/>
@@ -12,9 +13,9 @@
         <ETableColumn prop="created_at" label="Created At" width="185"/>
         <ETableColumn prop="updated_at" label="Updated At" width="185"/>
         <ETableColumn prop="description" label="Description" width="230"/>
+    </ETable>
 
         <div class="example-pagination-block">
-            <div class="example-demonstration">Pages</div>
                 <EPagination
                     @current-change="handlePaginationChange"
                     v-model:currentPage="currentPage"
@@ -22,10 +23,10 @@
                     :total="total"
                     layout="total, sizes, prev, pager, next, jumper"
                 />
-            </div>
-    </ETable>
-</template>
+        </div>
+            
 
+</template>
 
 <script>
 import axios from 'axios';
@@ -62,13 +63,37 @@ export default {
                 else {
                     transactionList.value = [];
                 }
-                console.log(pageSize,total,currentPage);
+                // console.log(pageSize,total,currentPage);
             }
             catch (error) {
                 console.log("Error", error);
             }
         };
         console.log(pageSize);
+
+        const downloadTransaction = async() =>{
+            try{
+                const walletId = Number(InputId.value[0]);
+                const format = "excel";
+                const response = await axios.post('http://localhost:3000/api/downloadFile',{
+                    walletId, format,
+                },{responseType: 'blob'});
+                const filename = response.headers['content-disposition'].split('filename=')[1];
+                const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+                // Create a link element and trigger a download
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+
+
+
+            }catch(error){
+                console.log("Error",error);
+            }
+        };
+
         const handlePaginationChange = (page) =>{
             currentPage.value = page;
             performHistory();
@@ -91,6 +116,7 @@ export default {
             currentPage,
             pageSize,
             handlePaginationChange,
+            downloadTransaction,
         };
     },
 }

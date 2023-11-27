@@ -2,14 +2,14 @@
   <div class="button-container">
     <EInput v-model="nameInput" placeholder="Enter your name" clearable/>
     <EInput v-model="balanceInput" placeholder="Enter balance" clearable/>
-    <!-- <button @click="handleCreateWallet">Create Wallet</button> -->
+    <button @click="handleCreateWallet">Create Wallet</button>
   </div>
 </template>
 
 
 <script>
 import { ref } from 'vue';
-// import { walletMixin } from '../mixin/walletIdsMixing.js';
+import axios from 'axios';
 
 export default {
   name: 'createWallet',
@@ -17,15 +17,23 @@ export default {
     const nameInput = ref('');
     const balanceInput = ref('');
 
-  //   const handleCreateWallet = async () => {
-  //       const walletData = await walletMixin();
-  //       console.log(walletData.walletId);
-  //   };
+    const handleCreateWallet = async() =>{
+      try{
+        const name = nameInput.value;
+        const balance = Number(balanceInput.value);
+        const createWallet = await axios.post('http://localhost:3000/api/wallet/setup',{
+          name,balance,
+        });
+        console.log(createWallet.data);
+      }catch(error){
+        console.log("Error Creating Wallet",error);
+      }
+    }
 
     return {
       nameInput,
       balanceInput,
-      // handleCreateWallet,
+      handleCreateWallet,
     };
   },
 };

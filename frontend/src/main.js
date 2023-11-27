@@ -10,6 +10,7 @@ import {
     ElTable,
     ElTableColumn,
     ElPagination,
+    ElIcon,
 } from 'element-plus';
 
 const app = createApp(App);
@@ -20,4 +21,5 @@ app.component('ECascader',ElCascader)
 app.component('ETable',ElTable)
 app.component('ETableColumn',ElTableColumn)
 app.component('EPagination',ElPagination)
+app.component('EIcon',ElIcon)
 app.use(router).mount('#app');
