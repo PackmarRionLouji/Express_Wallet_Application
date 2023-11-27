@@ -5,6 +5,7 @@ import transactMoney from '../components/transactMoney.vue';
 import transferMoney from '../components/transferMoney.vue';
 import checkBalance from '../components/checkBalance.vue';
 import transactionHistory from '../components/transactionHistory.vue';
+import transactionDetails from '../components/transactionDetails.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/transactionHistory',
       name: 'transactionHistory',
       component: transactionHistory,
+    },
+    {
+      path: '/transactionDetails',
+      name: 'transactionDetails',
+      component: transactionDetails,
     },
   ],
 });

@@ -11,11 +11,14 @@
       <EButton round @click="transactMoney" class="centered-button">Transact Money</EButton>
       <EButton round @click="checkBalance" class="centered-button">Check Balance</EButton>
       <EButton round @click="transactionHistory" class="centered-button">Transaction History</EButton>
+      <EButton round @click="transactionDetails" class="centered-button">Transaction Details</EButton>
+    
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "App",
   data() {
@@ -43,6 +46,10 @@ export default {
     transactionHistory() {
       console.log("Transaction history clicked");
       this.$router.push('/transactionHistory');
+    },
+    transactionDetails() {
+      console.log("Transaction Details clicked");
+      this.$router.push('/transactionDetails');
     },
   },
 };

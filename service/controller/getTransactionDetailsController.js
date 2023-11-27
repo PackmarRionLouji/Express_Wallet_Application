@@ -9,10 +9,10 @@ const getTransactionDetails=async(req,res)=>{
             const transactionDetails={
                 transaction,
             };
-            return res.status(200).json({transactionDetails});
+            return res.status(200).json({transaction: transactionDetails.transaction});
         }
         else{
-            return res.status(400).json({error:'Wallet not found'});
+            return res.status(400).json({error:'Transaction not found'});
         }
         
     }catch(error){

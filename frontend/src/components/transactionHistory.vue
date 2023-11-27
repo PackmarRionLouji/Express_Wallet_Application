@@ -3,6 +3,8 @@
         <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Id" filterable clearable v-model="InputId"/>
         <EButton @click="performHistory" :disabled="isDisabled">Submit</EButton>
         <EButton :disabled="isDisabled" @click="downloadTransaction">Download Button</EButton>
+        <!-- <EIcon class="download-icon" @click="handleDownload">el-icon-download</EIcon> -->
+        <el-icon><Download /></el-icon>
     </div>
     <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="{ width: '100%'}">
         <ETableColumn prop="transaction_id" label="Transaction ID" width="270"/>

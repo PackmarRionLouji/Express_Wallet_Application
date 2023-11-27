@@ -2,13 +2,13 @@
   <div class="button-container">
     <EInput v-model="nameInput" placeholder="Enter your name" clearable/>
     <EInput v-model="balanceInput" placeholder="Enter balance" clearable/>
-    <button @click="handleCreateWallet">Create Wallet</button>
+    <EButton @click="handleCreateWallet" :disabled="isDisabled">Create Wallet</EButton>
   </div>
 </template>
 
 
 <script>
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -16,6 +16,10 @@ export default {
   setup() {
     const nameInput = ref('');
     const balanceInput = ref('');
+
+    const isDisabled = computed(() =>{
+      return !(nameInput.value && balanceInput.value);
+    });
 
     const handleCreateWallet = async() =>{
       try{
@@ -34,6 +38,7 @@ export default {
       nameInput,
       balanceInput,
       handleCreateWallet,
+      isDisabled,
     };
   },
 };
