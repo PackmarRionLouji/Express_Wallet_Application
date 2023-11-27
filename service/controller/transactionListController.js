@@ -25,7 +25,7 @@ const getTransactionsList=async(req,res)=>{
             const totalCount = await Transactions.count({
                 where: {wallet_id:walletId},
             });
-            const count = await transactions.length;
+            const count = transactions.length;
             // console.log(totalCount);
             res.status(200).json({userName,totalCount,count,transactions:transactions});
         }       

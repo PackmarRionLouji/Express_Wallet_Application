@@ -5,15 +5,27 @@
         
     </div>
     <EButton :disabled="isDisabled" @click="downloadTransaction">Download Transaction</EButton>
-    <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="{ width: '100%'}">
+    <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="width: 100%">
         <ETableColumn prop="transaction_id" label="Transaction ID" width="270"/>
-        <ETableColumn prop="wallet_id" label="Wallet ID" width="90"/>
-        <ETableColumn prop="type" label="Type" width="80"/>
-        <ETableColumn prop="amount" label="Amount" width="120"/>
-        <ETableColumn prop="balance" label="Balance" width="120"/>
-        <ETableColumn prop="created_at" label="Created At" width="185"/>
-        <ETableColumn prop="updated_at" label="Updated At" width="185"/>
-        <ETableColumn prop="description" label="Description" width="230"/>
+        <ETableColumn prop="wallet_id" label="Wallet ID" width="85"/>
+        <ETableColumn prop="type" label="Type" width="70">
+            <template #default="{ row }">
+                {{ type(row.type) }}
+            </template>
+        </ETableColumn>
+        <ETableColumn prop="amount" label="Amount" width="100"/>
+        <ETableColumn prop="balance" label="Balance" width="100"/>
+        <ETableColumn prop="created_at" label="Created At" width="220"> 
+            <template #default="{ row }">
+                {{ formatDate(row.created_at) }}
+            </template>
+        </ETableColumn>
+        <ETableColumn prop="updated_at" label="Updated At" width="220"> 
+            <template #default="{ row }">
+                {{ formatDate(row.created_at) }}
+            </template>
+        </ETableColumn>
+        <ETableColumn prop="description" label="Description" width="220"/>
     </ETable>
 
         <div class="example-pagination-block">
@@ -94,16 +106,42 @@ export default {
         const handlePaginationChange = (page) =>{
             currentPage.value = page;
         }
+
         const isDisabled = computed(() => {
             return !InputId.value;
         });
+     
         onMounted(async () => {
             const walletData = await walletMixin();
             walletOptions.value = walletData ? walletData.walletId.map(wallet => ({ value: wallet, label: wallet })) : [];
         });
+
+        const formatDate = (dateString) =>{
+            const options = {
+                year:'numeric',
+                month:'numeric',
+                day:'numeric',
+                hour:'numeric',
+                minute:'numeric',
+                second:'numeric',
+                timeZoneName:'short',
+            };
+            return new Date(dateString).toLocaleDateString(undefined,options);
+        };
+
+        const type = (type) =>{
+            if(type===0){
+                return "Debit";
+            }
+            else if(type===1){
+                return "Credit";
+            }
+        };
+
         return {
             InputId,
             isDisabled,
+            formatDate,
             walletOptions,
             props1,
             performHistory,
@@ -113,6 +151,7 @@ export default {
             pageSize,
             handlePaginationChange,
             downloadTransaction,
+            type,
         };
     },
 }
