@@ -28,15 +28,16 @@
         <ETableColumn prop="description" label="Description" width="220"/>
     </ETable>
 
-        <div class="example-pagination-block">
-                <EPagination
-                    @current-change="handlePaginationChange"
-                    v-model:currentPage="currentPage"
-                    :page-size="pageSize"
-                    :total="total"
-                    layout="total, sizes, prev, pager, next, jumper"
-                />
-        </div>
+    <div class="example-pagination-block">
+    <EPagination
+        @current-change="handlePaginationChange"
+        v-model:currentPage.sync="currentPage"
+        :page-size="pageSize"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+    />
+    </div>
+
             
 
 </template>
@@ -105,6 +106,7 @@ export default {
 
         const handlePaginationChange = (page) =>{
             currentPage.value = page;
+            console.log(currentPage,total,pageSize);
         }
 
         const isDisabled = computed(() => {
