@@ -4,7 +4,7 @@
         <EButton @click="performHistory" :disabled="isDisabled">Submit</EButton>
         
     </div>
-    <EButton :disabled="isDisabled" @click="downloadTransaction">Download Transaction</EButton>
+    <EButton :disabled="isDisabled" @click="downloadTransaction">Download All Transactions</EButton>
     <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="width: 100%">
         <ETableColumn prop="transaction_id" label="Transaction ID" width="270"/>
         <ETableColumn prop="wallet_id" label="Wallet ID" width="85"/>
@@ -30,12 +30,12 @@
 
     <div class="pagination-container" v-if="pageSize>1">
         <EPagination
-        :page-size=pageSize
-        :pager-count="calculatePagerCount"
-        background layout="prev, pager, next"
-        :total="total"
-        @current-change="handlePaginationChange"
-        v-model:currentPage.sync="currentPage"
+            :page-size=pageSize
+            :pager-count="calculatePagerCount"
+            background layout="prev, pager, next"
+            :total="total"
+            @current-change="handlePaginationChange"
+            v-model:currentPage.sync="currentPage"
         />
     </div>
 
