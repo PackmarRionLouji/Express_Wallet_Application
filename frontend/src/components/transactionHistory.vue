@@ -28,15 +28,19 @@
         <ETableColumn prop="description" label="Description" width="220"/>
     </ETable>
 
-    <div class="example-pagination-block">
-    <EPagination
+    <div class="pagination-container" v-if="pageSize>1">
+        <EPagination
+        :page-size=pageSize
+        :pager-count="calculatePagerCount"
+        background layout="prev, pager, next"
+        :total="total"
         @current-change="handlePaginationChange"
         v-model:currentPage.sync="currentPage"
-        :page-size="pageSize"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-    />
+        />
     </div>
+
+    
+
 
             
 
@@ -62,13 +66,12 @@ export default {
         const performHistory = async () => {
             try {
                 const walletId = Number(InputId.value[0]);
-                const response = await axios.get(`http://localhost:3000/api/getTransactionsList?walletId=${walletId}&page=1`, {});
+                const response = await axios.get(`http://localhost:3000/api/getTransactionsList?walletId=${walletId}&page=${currentPage.value}`, {});
                 console.log(response);
                 if (response.data.transactions && response.data.transactions.length > 0) {
                     transactionList.value = response.data.transactions;
                     total.value = Number(response.data.totalCount);
                     // console.log(total.value);
-                    pageSize.value = Math.ceil((total.value)/2);
                     // console.log(pageSize);
                 }
                 else {
@@ -80,7 +83,12 @@ export default {
                 console.log("Error", error);
             }
         };
-        console.log(pageSize);
+
+
+        const calculatePagerCount = computed(() => {
+            return Math.ceil(total.value / pageSize.value);
+        });
+        // console.log(pageSize);
 
         const downloadTransaction = async() =>{
             try{
@@ -106,7 +114,7 @@ export default {
 
         const handlePaginationChange = (page) =>{
             currentPage.value = page;
-            console.log(currentPage,total,pageSize);
+            performHistory();
         }
 
         const isDisabled = computed(() => {
@@ -114,9 +122,11 @@ export default {
         });
      
         onMounted(async () => {
+            // await performHistory();
             const walletData = await walletMixin();
             walletOptions.value = walletData ? walletData.walletId.map(wallet => ({ value: wallet, label: wallet })) : [];
         });
+
 
         const formatDate = (dateString) =>{
             const options = {
@@ -142,6 +152,7 @@ export default {
 
         return {
             InputId,
+            calculatePagerCount,
             isDisabled,
             formatDate,
             walletOptions,
@@ -160,10 +171,4 @@ export default {
 </script>
 
 <style scoped>
-.example-pagination-block + .example-pagination-block {
-  margin-top: 10px;
-}
-.example-pagination-block .example-demonstration {
-  margin-bottom: 16px;
-}
 </style>
