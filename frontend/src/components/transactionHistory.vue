@@ -2,10 +2,9 @@
     <div style="width:200px">
         <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Id" filterable clearable v-model="InputId"/>
         <EButton @click="performHistory" :disabled="isDisabled">Submit</EButton>
-        <EButton :disabled="isDisabled" @click="downloadTransaction">Download Button</EButton>
-        <!-- <EIcon class="download-icon" @click="handleDownload">el-icon-download</EIcon> -->
-        <el-icon><Download /></el-icon>
+        
     </div>
+    <EButton :disabled="isDisabled" @click="downloadTransaction">Download Transaction</EButton>
     <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="{ width: '100%'}">
         <ETableColumn prop="transaction_id" label="Transaction ID" width="270"/>
         <ETableColumn prop="wallet_id" label="Wallet ID" width="90"/>
@@ -37,9 +36,6 @@ import { walletMixin } from '../mixin/walletIdsMixing.js';
 export default {
     name: "transactionHistory",
     setup() {
-
-        // const totalResponse = await axios.get(`http://localhost:3000/api/transactionTotal?walletId=${walletId}`,{});
-        // const page_size = totalResponse.data.getTotal;
         const InputId = ref("");
         const walletOptions = ref([]);
         const transactionList = ref([]);
@@ -80,16 +76,15 @@ export default {
                 const response = await axios.post('http://localhost:3000/api/downloadFile',{
                     walletId, format,
                 },{responseType: 'blob'});
-                const filename = response.headers['content-disposition'].split('filename=')[1];
-                const blob = new Blob([response.data], { type: response.headers['content-type'] });
+                console.log(response);
 
-                // Create a link element and trigger a download
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = filename;
-                link.click();
+                    const filename = `download_${Date.now()}.xlsx`;  // Generate a filename
 
-
+                    const blob = new Blob([response.data], { type: response.headers['content-type'] });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
 
             }catch(error){
                 console.log("Error",error);
@@ -98,7 +93,6 @@ export default {
 
         const handlePaginationChange = (page) =>{
             currentPage.value = page;
-            performHistory();
         }
         const isDisabled = computed(() => {
             return !InputId.value;

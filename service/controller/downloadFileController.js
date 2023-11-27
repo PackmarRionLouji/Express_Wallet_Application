@@ -21,8 +21,6 @@ const createFile=async(req,res)=>{
                 const worksheet=workbook.addWorksheet('Transactions');
                 worksheet.addRow({'User Name ':userName});
                 worksheet.addRow({'Wallet ID':walletId});
-                worksheet.addRow();
-                worksheet.addRow();
 
                 worksheet.columns=[
                         {header:'User Name',key:'userName',width:20},
