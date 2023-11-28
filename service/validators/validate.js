@@ -27,7 +27,6 @@ class Validate {
 
   async validateTransaction(wallet_id, amount,description) {
     const wallet = await Wallets.findByPk(wallet_id);
-
     if (!wallet) {
       return false;
     } else {

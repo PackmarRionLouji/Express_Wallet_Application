@@ -33,7 +33,7 @@ const getTransactionsList=async(req,res)=>{
                 where: {wallet_id:wallet.id},
             });
             const count = transactions.length;
-            // console.log(totalCount);
+            console.log(transactions);
             res.status(200).json({userName,totalCount,count,limit,transactions:transactions});
         }       
     }

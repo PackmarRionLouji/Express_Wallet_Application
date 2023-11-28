@@ -68,13 +68,13 @@ export default {
                 const walletId = InputId.value[0];
                 // console.log(walletId);
                 const response = await axios.get(`http://localhost:3000/api/getTransactionsList?walletId=${walletId}&page=${currentPage.value}`, {});
-                console.log(response);
+                // console.log(response);
                 if (response.data.transactions && response.data.transactions.length > 0) {
                     transactionList.value = response.data.transactions;
-                    console.log(response.data.transactions);
+                    // console.log(response.data.transactions);
                     total.value = Number(response.data.totalCount);
                     pageSize.value = Number(response.data.limit);
-                    console.log(transactionList);
+                    // console.log(transactionList);
                     // console.log(total.value);
                     // console.log(pageSize);
                 }

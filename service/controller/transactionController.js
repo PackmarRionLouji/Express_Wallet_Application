@@ -10,29 +10,29 @@ const initializeTransaction=async(req,res)=>{
         });
         const walletId = wallet.id;
         const { amount,description }=req.body;
-        
+        const data = await createData(walletId, amount, description);
         const validate =new Validate();
-        const validate_Transaction = await validate.validateTransaction(walletId,amount,description); 
-        if(validate_Transaction){
-            const data = await createData(walletId, amount, description);
+        const validate_Transaction = await validate.validateTransaction(walletId,amount,description);
+        console.log(validate_Transaction.error);
+        if(!validate_Transaction.error){
             if(Object.keys(data).length>2){
                 const result=await createTransaction([data]);
                 if(amount>=0){
-                    return res.status(200).json({ message:`Money credited into wallet ${walletName}. Transaction is completed Successfully`,transaction:result});
+                    return res.status(200).json({ message:`Transaction is completed Successfully. ${amount} credited into wallet ${walletName}.`,transaction:result});
                 }else{
-                    return res.status(200).json({ message:`Money debitted from wallet ${walletName}. Transaction is completed Successfully`,transaction:result});
+                    return res.status(200).json({ message:`Transaction is completed Successfully. ${-amount} debitted from wallet ${walletName}.`,transaction:result});
                 }
                 
             }else if(Object.keys(data).length===1){
-                res.status(400).json({message:data['error']});
+                return res.status(400).json({error:data['error']});
             }
         }
         else{
-            res.status(400).json({error:"Enter valid Details"});
+            return res.status(400).json({error:`${validate_Transaction.error.message}`});
         }
     }catch(error){
         console.log(error);
-        res.status(500).json({error:'Internal Server Error'});
+        return res.status(500).json({error:'Internal Server Error'});
     }
 }
 

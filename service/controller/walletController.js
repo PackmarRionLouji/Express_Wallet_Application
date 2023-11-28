@@ -6,23 +6,22 @@ const createWallet = async (request, response) => {
   try {
     const { name, balance } = request.body;
     if(balance<0){
-      response.status(400).json({error:"Initial Amount cannot be negative"});
+      return response.status(400).json({error:"Initial Amount cannot be negative"});
     }
     else{
       const validator = new Validate();
-      const { error: validationError } = validator.validateWallet(name, balance);
       if(typeof balance==='number'){
+      const { error: validationError } = validator.validateWallet(name, balance);
         if (validationError) {
           return response.status(400).json({
-            error: 'Validation Error',
-            message:validationError.details[0].message,
+            error: `Validation Error. ${validationError.details[0].message}`,
           });
         }
         const checkExistingWallet=await Wallets.findOne({
             where:{name},
         });
         if(checkExistingWallet){
-            return response.status(400).json({error:`Error creating wallet. ${name} already exixts.`});
+            return response.status(400).json({error:`Error creating wallet. ${name} already exixts.`,success:false});
         }
         else{
           const newWallet = await Wallets.create({
@@ -38,17 +37,16 @@ const createWallet = async (request, response) => {
               balance,
               description:"Initial Creation",
           });
-          console.log("Wallet created Successfully...");
-          response.status(200).json({wallet: newWallet, success:true});
+          return response.status(200).json({wallet: [newWallet], id: newWallet.id,success:true});
         }
       }else{
-        response.status(400).json({error:"Number must be a numeric value.",success:false});
+        return response.status(400).json({error:"Balance must be a numeric value.",success:false});
       } 
     }
   }
   catch (error) {
         console.error("Error creating Wallet...", error);
-        response.status(500).json({ error: "Internal Server Error" });
+        return response.status(500).json({ error: "Internal Server Error",success:false});
   }  
 };
 
