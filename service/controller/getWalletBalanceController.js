@@ -19,14 +19,14 @@ const getWalletBalance=async(req,res)=>{
 
         if(Wallet){
             const getBalance = Wallet.balance;
-            return res.status(200).json({getBalance});
+            return res.status(200).json({balance: getBalance, wallet: Wallet});
         }
         else{
             return res.status(400).json({error:'Wallet not found'});
         }
     }catch(error){
         console.log(error);
-        res.status(500).json({error:'Internal Server Error'});
+        return res.status(500).json({error:'Internal Server Error'});
     }
 }
 

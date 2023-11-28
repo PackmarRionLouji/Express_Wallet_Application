@@ -13,14 +13,13 @@ const initializeTransaction=async(req,res)=>{
         const data = await createData(walletId, amount, description);
         const validate =new Validate();
         const validate_Transaction = await validate.validateTransaction(walletId,amount,description);
-        console.log(validate_Transaction.error);
         if(!validate_Transaction.error){
             if(Object.keys(data).length>2){
                 const result=await createTransaction([data]);
                 if(amount>=0){
-                    return res.status(200).json({ message:`Transaction is completed Successfully. ${amount} credited into wallet ${walletName}.`,transaction:result});
+                    return res.status(200).json({ message:`Transaction is completed Successfully. ${amount} credited into wallet ${walletName}.`,transaction:[result,walletName]});
                 }else{
-                    return res.status(200).json({ message:`Transaction is completed Successfully. ${-amount} debitted from wallet ${walletName}.`,transaction:result});
+                    return res.status(200).json({ message:`Transaction is completed Successfully. ${-amount} debitted from wallet ${walletName}.`,transaction:[result,walletName]});
                 }
                 
             }else if(Object.keys(data).length===1){

@@ -5,10 +5,11 @@ const fs = require('fs');
 
 const createFile=async(req,res)=>{
         try{
-                const { walletId,format } = req.body;
-                // walletId,format,wallet,userName
-                const wallet = await Wallets.findByPk(walletId);
-                const userName = wallet.name;
+                const { userName,format } = req.body;
+                const wallet = await Wallets.findOne({
+                        where: {name: userName}
+                });
+                const walletId = wallet.id;
                 const workbook=new exceljs.Workbook();
                 const transactions=await Transactions.findAll({
                         where: {wallet_id:walletId},
@@ -50,23 +51,15 @@ const createFile=async(req,res)=>{
                         });
                 }
                 let excelBuffer;
-                // fs.writeFileSync('transactions.xlsx',excelBuffer);
 
-
-
-                if(format==='excel'){
-                        excelBuffer=await workbook.xlsx.writeBuffer();
-                        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                        res.setHeader('Content-Disposition', 'attachment; filename=transactions.xlsx');
-                        res.status(200).send(excelBuffer);
-                        
-                }
+               excelBuffer=await workbook.xlsx.writeBuffer();
+               res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+               res.setHeader('Content-Disposition', 'attachment; filename=transactions.xlsx');
+               res.status(200).send(excelBuffer);
+               
                 // else if(format ==='pdf'){
                         
                 // }
-                else{
-                        res.status(400).json({error:"Invalid format specified"});
-                }
         }catch(error){
                 console.log("Error creating file",error);
                 res.status(500).json({error:"Internal Server Error"});

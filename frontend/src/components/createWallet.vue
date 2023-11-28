@@ -7,8 +7,8 @@
     <EAlert v-else-if="submitButtonClicked && !showSuccessAlert" title="Wallet not created" type="error" effect="dark" center show-icon>
       {{ `${error}` }}
     </EAlert>
-    <EInput v-model="nameInput" placeholder="Enter your name" clearable/>
-    <EInput v-model="balanceInput" placeholder="Enter balance" clearable/>
+    <EInput v-model="nameInput" placeholder="Enter your name" clearable style="width: 25%;"/>
+    <EInput v-model="balanceInput" placeholder="Enter balance" clearable style="width: 25%;"/>
     <EButton @click="handleCreateWallet" :disabled="isDisabled">Create Wallet</EButton>
     <ETable v-if="walletDetails.length>0" :data="walletDetails" border fit clearselection style="width: 100%">
         <ETableColumn prop="name" label="Name" width="300"/>

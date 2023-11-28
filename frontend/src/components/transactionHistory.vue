@@ -1,14 +1,22 @@
 <template>
-    <div style="width:200px">
-        <ECascader :options="walletOptions" :props="props1" placeholder="Name" filterable clearable v-model="InputId"/>
-        <EButton @click="performHistory" :disabled="isDisabled">Submit</EButton>
-        
+
+    <EAlert v-if="submitButtonClicked && showSuccessAlert " type="success" effect="dark" center show-icon>
+      <strong>{{ `${displayMessage}` }}</strong><br>
+    </EAlert>
+    <EAlert v-else-if="submitButtonClicked && !showSuccessAlert" title="Transaction Failed" type="error" effect="dark" center show-icon>
+      {{ `${errorMessage}` }}
+    </EAlert>
+
+
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100vw; margin-top: 50px;">        
+        <ECascader :options="walletOptions" :props="props1" placeholder="Name" filterable clearable v-model="InputId" style="20%;"/>
+        <EButton @click="performHistory" :disabled="isDisabled" style="20%;">Submit</EButton>
+        <EButton v-if="transactionList.length>0" :disabled="isDisabled" @click="downloadTransaction" style="25%;">Download All Transactions</EButton>
     </div>
-    <EButton :disabled="isDisabled" @click="downloadTransaction">Download All Transactions</EButton>
     <ETable v-if="transactionList.length>0" :data="transactionList" border fit clearselection style="width: 100%">
-        <ETableColumn prop="transaction_id" label="Transaction ID" width="270"/>
-        <ETableColumn prop="wallet_id" label="Wallet ID" width="85"/>
-        <ETableColumn prop="type" label="Type" width="70">
+        <ETableColumn prop="transaction_id" label="Transaction ID" width="300"/>
+        <ETableColumn prop="wallet_id" label="Wallet ID" width="100"/>
+        <ETableColumn prop="type" label="Type" width="90">
             <template #default="{ row }">
                 {{ type(row.type) }}
             </template>
@@ -30,6 +38,7 @@
 
     <div class="pagination-container" v-if="pageSize>1">
         <EPagination
+            v-if="pageSize>1"
             :page-size=pageSize
             :pager-count="calculatePagerCount"
             background layout="prev, pager, next"
@@ -58,7 +67,11 @@ export default {
         const transactionList = ref([]);
         const total = ref(0); 
         const currentPage = ref(1);
-        const pageSize = ref(2);
+        const pageSize = ref(0);
+        const displayMessage = ref('');
+        const errorMessage = ref('');
+        const showSuccessAlert = ref(false);
+        const submitButtonClicked = ref(null);
 
         const props1 = {
             checkStrictly: true,
@@ -74,17 +87,25 @@ export default {
                     // console.log(response.data.transactions);
                     total.value = Number(response.data.totalCount);
                     pageSize.value = Number(response.data.limit);
+                    displayMessage.value = 'Transactions fetched Successfully';
                     // console.log(transactionList);
                     // console.log(total.value);
                     // console.log(pageSize);
+                    showSuccessAlert.value = true;
+                    submitButtonClicked.value = true;
+
                 }
                 else {
                     transactionList.value = [];
+                    showSuccessAlert.value = true;
+                    submitButtonClicked.value = true;
                 }
                 // console.log(pageSize,total,currentPage);
             }
             catch (error) {
-                console.log("Error", error);
+                showSuccessAlert.value = false;
+                submitButtonClicked.value = true;
+                error.value = 'Error fetching Transactions';
             }
         };
 
@@ -96,10 +117,10 @@ export default {
 
         const downloadTransaction = async() =>{
             try{
-                const walletId = Number(InputId.value[0]);
+                const userName = InputId.value[0];
                 const format = "excel";
                 const response = await axios.post('http://localhost:3000/api/downloadFile',{
-                    walletId, format,
+                    userName, format,
                 },{responseType: 'blob'});
                 console.log(response);
 
@@ -110,9 +131,14 @@ export default {
                     link.href = window.URL.createObjectURL(blob);
                     link.download = filename;
                     link.click();
+                    showSuccessAlert.value = true;
+                    submitButtonClicked.value = true;
+                    displayMessage.value = "File Downloaded Successfully";
 
             }catch(error){
-                console.log("Error",error);
+                showSuccessAlert.value = false;
+                submitButtonClicked.value = true;
+                errorMessage.value = "File Download Failed";
             }
         };
 
@@ -169,6 +195,10 @@ export default {
             handlePaginationChange,
             downloadTransaction,
             type,
+            displayMessage,
+            errorMessage,
+            showSuccessAlert,
+            submitButtonClicked,
         };
     },
 }

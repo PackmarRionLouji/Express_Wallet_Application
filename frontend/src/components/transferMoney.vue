@@ -1,18 +1,69 @@
 <template>
-    <div style="width: 200px">
+    <EAlert v-if="submitButtonClicked && showSuccessAlert " type="success" effect="dark" center show-icon>
+      <strong>{{ `Transaction Successfull` }}</strong><br>
+      {{ `${message}` }}
+    </EAlert>
+    <EAlert v-else-if="submitButtonClicked && !showSuccessAlert" title="Transaction Failed" type="error" effect="dark" center show-icon>
+      {{ `${error}` }}
+    </EAlert>
+
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100vw; margin-top: 50px;">        
         <ECascader :options="walletOptions" 
                    :props="props1" 
                     clearable 
                     filterable 
-                    v-model="InputSenderWalletId" placeholder="Sender Name"/>
+                    v-model="InputSenderWalletId" placeholder="Sender Name" style="width: 25%;"/>
         <ECascader :options="walletOptions" 
                    :props="props1" 
                     clearable 
                     filterable 
-                    v-model="InputReceiverWalletId" placeholder="Receiver Name"/>
-        <EInput v-model="InputAmount" placeholder="Amount" clearable/>
-        <EInput v-model="InputDescription" placeholder="Description" clearable/>  
-        <EButton @click="transferMoney" :disabled="isDisabled">Submit</EButton> 
+                    v-model="InputReceiverWalletId" placeholder="Receiver Name" style="width: 25%;"/>
+        <EInput v-model="InputAmount" placeholder="Amount" clearable style="width: 25%;"/>
+        <EInput v-model="InputDescription" placeholder="Description" clearable style="width: 25%;"/>  
+        <EButton @click="transferMoney" :disabled="isDisabled" style="width: 10%;">Submit</EButton> 
+
+
+    <ETable v-if="senderDetails.length>0" :data="senderDetails" border fit clearselection style="width: 100%">
+        <ETableColumn prop="wallet_id" label="Id" width="80"/>
+        <ETableColumn prop="amount" label="Amount" width="120"/>
+        <ETableColumn prop="balance" label="Balance" width="120"/>
+        <ETableColumn prop="type" label="Type" width="120">
+            {{ InputAmount <= 0 ? 'Credit' : 'Debit' }}
+        </ETableColumn>
+        <ETableColumn prop="description" label="Description" width="300"/>
+        <ETableColumn prop="created_at" label="Created At" width="300">
+          <template #default="{ row }">
+            {{ formatDate(row.created_at) }}
+          </template>
+        </ETableColumn>
+        <ETableColumn prop="updated_at" label="Updated At" width="310">
+          <template #default="{ row }">
+            {{ formatDate(row.updated_at) }}
+          </template>
+        </ETableColumn>
+    </ETable>
+
+
+    <ETable v-if="receiverDetails.length>0" :data="receiverDetails" border fit clearselection style="width: 100%">
+        <ETableColumn prop="wallet_id" label="Id" width="80"/>
+        <ETableColumn prop="amount" label="Amount" width="120"/>
+        <ETableColumn prop="balance" label="Balance" width="120"/>
+        <ETableColumn prop="type" label="Type" width="120">
+            {{ InputAmount >= 0 ? 'Credit' : 'Debit' }}
+        </ETableColumn>
+        <ETableColumn prop="description" label="Description" width="300"/>
+        <ETableColumn prop="created_at" label="Created At" width="300">
+          <template #default="{ row }">
+            {{ formatDate(row.created_at) }}
+          </template>
+        </ETableColumn>
+        <ETableColumn prop="updated_at" label="Updated At" width="310">
+          <template #default="{ row }">
+            {{ formatDate(row.updated_at) }}
+          </template>
+        </ETableColumn>
+    </ETable>
+        
     </div>    
 </template>
 
@@ -28,11 +79,32 @@ export default {
         const InputAmount = ref('');
         const InputDescription = ref('');
         const walletOptions= ref([]);
+        const error = ref('');
+        const message = ref('');
+        const senderMoneyDetails = ref([]);
+        const receiverMoneyDetails = ref([]);
+        const showSuccessAlert = ref(false);
+        const submitButtonClicked = ref(null);
+        const senderDetails = ref([]);
+        const receiverDetails = ref([]);
 
         const props1 = {
             checkStrictly: true,
         };
 
+        const formatDate = (dateString) =>{
+            const options = {
+                year:'numeric',
+                month:'numeric',
+                day:'numeric',
+                hour:'numeric',
+                minute:'numeric',
+                second:'numeric',
+                timeZoneName:'short',
+            };
+            return new Date(dateString).toLocaleDateString(undefined,options);
+        };
+        
         const transferMoney = async() =>{
             try{
                 const fromAcc = InputSenderWalletId.value[0];
@@ -43,9 +115,17 @@ export default {
                 const transfer = await axios.post('http://localhost:3000/api/transferMoney',{
                     fromAcc,toAcc,description,amount,
                 });
-                console.log(transfer);
-            }catch(error){
-                console.log("Error transferring money",error);
+
+                message.value = transfer.data.message;
+                senderDetails.value = [transfer.data.Sender_Details]; 
+                receiverDetails.value = [transfer.data.Receiver_Details]; 
+
+                showSuccessAlert.value = true;
+                submitButtonClicked.value = true;
+            }catch(error1){
+                error.value = error1.response.data.error; 
+                showSuccessAlert.value = false;
+                submitButtonClicked.value=true;
             }
         }
 
@@ -59,7 +139,23 @@ export default {
         });
 
         return {
-            transferMoney, walletOptions, isDisabled, props1, InputAmount,InputReceiverWalletId,InputSenderWalletId,InputDescription
+            transferMoney, 
+            walletOptions, 
+            isDisabled, 
+            props1, 
+            InputAmount,
+            InputReceiverWalletId,
+            InputSenderWalletId,
+            InputDescription,
+            formatDate,
+            error,
+            message,
+            showSuccessAlert,
+            submitButtonClicked,
+            receiverMoneyDetails,
+            senderMoneyDetails,
+            senderDetails,
+            receiverDetails,
         }
 
     },
