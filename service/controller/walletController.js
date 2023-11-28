@@ -39,10 +39,10 @@ const createWallet = async (request, response) => {
               description:"Initial Creation",
           });
           console.log("Wallet created Successfully...");
-          response.status(200).json(newWallet);
+          response.status(200).json({wallet: newWallet, success:true});
         }
       }else{
-        response.status(400).json({error:"Number must be a numeric value."});
+        response.status(400).json({error:"Number must be a numeric value.",success:false});
       } 
     }
   }

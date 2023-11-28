@@ -7,27 +7,34 @@ const getTransactionsList=async(req,res)=>{
         
         //pagination
         
-        const wallet = await Wallets.findByPk(walletId);
+        const walletDetails = await Wallets.findOne({
+            where: {name : walletId },
+        });
+
+        const wallet = walletDetails.dataValues;
+
+        // console.log(wallet);
         const userName = wallet.name;
+        // console.log(userName);
 
         if(!wallet){
             res.status(400).json({error:"Wallet not found"});
         }
         else{
-            const limit = 2;
+            const limit = 10;
             const offset = (page - 1) * limit;
             const transactions = await Transactions.findAll({
-                where: { wallet_id: walletId },
+                where: { wallet_id: wallet.id },
                 offset: offset,
                 limit: limit,
                 order: [['created_at', 'DESC']],
             });
             const totalCount = await Transactions.count({
-                where: {wallet_id:walletId},
+                where: {wallet_id:wallet.id},
             });
             const count = transactions.length;
             // console.log(totalCount);
-            res.status(200).json({userName,totalCount,count,transactions:transactions});
+            res.status(200).json({userName,totalCount,count,limit,transactions:transactions});
         }       
     }
     catch(error){

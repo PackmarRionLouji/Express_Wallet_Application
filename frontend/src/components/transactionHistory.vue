@@ -1,6 +1,6 @@
 <template>
     <div style="width:200px">
-        <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Id" filterable clearable v-model="InputId"/>
+        <ECascader :options="walletOptions" :props="props1" placeholder="Name" filterable clearable v-model="InputId"/>
         <EButton @click="performHistory" :disabled="isDisabled">Submit</EButton>
         
     </div>
@@ -65,12 +65,16 @@ export default {
         };
         const performHistory = async () => {
             try {
-                const walletId = Number(InputId.value[0]);
+                const walletId = InputId.value[0];
+                // console.log(walletId);
                 const response = await axios.get(`http://localhost:3000/api/getTransactionsList?walletId=${walletId}&page=${currentPage.value}`, {});
                 console.log(response);
                 if (response.data.transactions && response.data.transactions.length > 0) {
                     transactionList.value = response.data.transactions;
+                    console.log(response.data.transactions);
                     total.value = Number(response.data.totalCount);
+                    pageSize.value = Number(response.data.limit);
+                    console.log(transactionList);
                     // console.log(total.value);
                     // console.log(pageSize);
                 }

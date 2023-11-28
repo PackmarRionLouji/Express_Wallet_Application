@@ -1,6 +1,6 @@
 <template>
     <div style="width: 200px">
-        <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Id" clearable filterable v-model="InputId"/>     
+        <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Name" clearable filterable v-model="InputId"/>     
         <EButton @click="checkBalance" :disabled="isDisabled">Submit</EButton>
     </div>    
 </template>
@@ -30,7 +30,7 @@
 
             const checkBalance = async () => {
                 try {
-                    const walletId = Number(InputId.value[0]);
+                    const walletId = InputId.value[0];
                     const balanceOutput = await axios.post('http://localhost:3000/api/getWalletBalance', {
                         walletId: walletId,
                     });

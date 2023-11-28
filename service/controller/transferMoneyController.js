@@ -6,15 +6,24 @@ const { createData,createTransaction } =require('../lib');
 const transferMoney=async(req,res)=>{
     const { fromAcc,toAcc,amount,description } = req.body;
 
-    if(fromAcc === toAcc ){
+    const sourceAcc = await Wallets.findOne({
+        where: {name: fromAcc}
+    });
+
+    const destAcc = await Wallets.findOne({
+        where: {name: toAcc}
+    });
+
+    const fromAcc1 = sourceAcc.id;
+    const toAcc1 = destAcc.id;
+
+    if(fromAcc1 === toAcc1 ){
         return res.status(400).json({error:'Sender account and Receiver account cannot be same.'});
     }
     else if( amount <0){
         return res.status(400).json({error:"Enter valid amount"});
     }
     try{
-        const sourceAcc = await Wallets.findByPk(fromAcc);
-        const destAcc = await Wallets.findByPk(toAcc);
         if(!sourceAcc && !destAcc){
             return res.status(404).json({error:'Sender and Receiver account details are not found.'});
         }
@@ -30,12 +39,12 @@ const transferMoney=async(req,res)=>{
             const creditAmount=amount;
             const debitAmount=-amount;
             const validate =new Validate();
-            const validate_Transaction1 = await validate.validateTransaction(fromAcc,debitAmount,description);
-            const validate_Transaction2 = await validate.validateTransaction(toAcc,creditAmount,description);
+            const validate_Transaction1 = await validate.validateTransaction(fromAcc1,debitAmount,description);
+            const validate_Transaction2 = await validate.validateTransaction(toAcc1,creditAmount,description);
          
             if(validate_Transaction1 && validate_Transaction2){
-                const sourceAcc_data = [await createData(fromAcc,debitAmount,description)];
-                const destAcc_data = [await createData(toAcc,creditAmount,description)];
+                const sourceAcc_data = [await createData(fromAcc1,debitAmount,description)];
+                const destAcc_data = [await createData(toAcc1,creditAmount,description)];
 
                 // console.log(sourceAcc_data[0]);
                 if(Object.keys(sourceAcc_data[0]).length>2 && Object.keys(destAcc_data[0]).length>2){

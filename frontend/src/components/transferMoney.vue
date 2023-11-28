@@ -4,12 +4,12 @@
                    :props="props1" 
                     clearable 
                     filterable 
-                    v-model="InputSenderWalletId" placeholder="Sender Wallet Id"/>
+                    v-model="InputSenderWalletId" placeholder="Sender Name"/>
         <ECascader :options="walletOptions" 
                    :props="props1" 
                     clearable 
                     filterable 
-                    v-model="InputReceiverWalletId" placeholder="Receiver Wallet Id"/>
+                    v-model="InputReceiverWalletId" placeholder="Receiver Name"/>
         <EInput v-model="InputAmount" placeholder="Amount" clearable/>
         <EInput v-model="InputDescription" placeholder="Description" clearable/>  
         <EButton @click="transferMoney" :disabled="isDisabled">Submit</EButton> 
@@ -35,8 +35,8 @@ export default {
 
         const transferMoney = async() =>{
             try{
-                const fromAcc = Number(InputSenderWalletId.value[0]);
-                const toAcc = Number(InputReceiverWalletId.value[0]); 
+                const fromAcc = InputSenderWalletId.value[0];
+                const toAcc = InputReceiverWalletId.value[0]; 
                 const description = InputDescription.value;
                 const amount = Number(InputAmount.value);
                 

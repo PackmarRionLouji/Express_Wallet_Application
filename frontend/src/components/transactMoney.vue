@@ -1,6 +1,6 @@
 <template>
     <div style="width: 200px">
-        <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Id" clearable filterable v-model="InputId"/>
+        <ECascader :options="walletOptions" :props="props1" placeholder="Wallet Name" clearable filterable v-model="InputId"/>
         <EInput v-model="InputAmount" placeholder="Amount" clearable/>   
         <EInput v-model="InputDescription" placeholder="Description" clearable/>  
         <EButton @click="createTransaction" :disabled="isDisabled">Submit</EButton>
