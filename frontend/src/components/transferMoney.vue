@@ -22,7 +22,7 @@
         <EInput v-model="InputDescription" placeholder="Description" clearable style="width: 25%;"/>  
         <EButton @click="transferMoney" :disabled="isDisabled" style="width: 10%;">Submit</EButton> 
 
-
+    <h3 v-if="senderDetails.length>0">Sender Details</h3>
     <ETable v-if="senderDetails.length>0" :data="senderDetails" border fit clearselection style="width: 100%">
         <ETableColumn prop="wallet_id" label="Id" width="80"/>
         <ETableColumn prop="amount" label="Amount" width="120"/>
@@ -43,7 +43,7 @@
         </ETableColumn>
     </ETable>
 
-
+    <h3 v-if="receiverDetails.length>0">Receiver Details</h3>
     <ETable v-if="receiverDetails.length>0" :data="receiverDetails" border fit clearselection style="width: 100%">
         <ETableColumn prop="wallet_id" label="Id" width="80"/>
         <ETableColumn prop="amount" label="Amount" width="120"/>
@@ -123,6 +123,7 @@ export default {
                 showSuccessAlert.value = true;
                 submitButtonClicked.value = true;
             }catch(error1){
+                console.log(error1.response.data.error);
                 error.value = error1.response.data.error; 
                 showSuccessAlert.value = false;
                 submitButtonClicked.value=true;

@@ -61,14 +61,14 @@ const transferMoney=async(req,res)=>{
                             return res.status(200).json({ message:`Money is transferred from ${fromAcc} to ${toAcc}. Transaction is completed Successfully`,Sender_Details:result[0],Receiver_Details:result[1]});
                             
                         }else if(Object.keys(sourceAcc_data[0]).length===1 && Object.keys(destAcc_data[0]).length===1){
-                            console.log("Endpoint");
-                            return res.status(400).json({message:destAcc_data['message']});
+                            // console.log("Endpoint");
+                            return res.status(400).json({error:destAcc_data['message']});
                         }
                         else if(Object.keys(sourceAcc_data[0]).length===1){
-                            return res.status(400).json({message:sourceAcc_data[0]['error']});   
+                            return res.status(400).json({error:sourceAcc_data[0]['error']});   
                         }
                         else if(Object.keys(destAcc_data[0]).length===1){
-                            return res.status(400).json({message:destAcc_data[0]['error']});   
+                            return res.status(400).json({error:destAcc_data[0]['error']});   
                         }
                     }
                     else{
