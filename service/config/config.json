@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "rionlouji",
     "password": "admin",
     "database": "Wallet_Application",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "rionlouji"
   },
   "test": {
-    "username": "postgres",
+    "username": "rionlouji",
     "password": "admin",
     "database": "Wallet_Application",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "rionlouji"
   },
   "production": {
-    "username": "postgres",
+    "username": "rionlouji",
     "password": "admin",
     "database": "Wallet_Application",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "rionlouji"
   }
 }
