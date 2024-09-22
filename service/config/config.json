@@ -4,20 +4,20 @@
     "password": "admin",
     "database": "Wallet_Application",
     "host": "localhost",
-    "dialect": "rionlouji"
+    "dialect": "postgres"
   },
   "test": {
     "username": "rionlouji",
     "password": "admin",
     "database": "Wallet_Application",
     "host": "localhost",
-    "dialect": "rionlouji"
+    "dialect": "postgres"
   },
   "production": {
     "username": "rionlouji",
     "password": "admin",
     "database": "Wallet_Application",
     "host": "localhost",
-    "dialect": "rionlouji"
+    "dialect": "postgres"
   }
 }
